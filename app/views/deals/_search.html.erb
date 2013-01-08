@@ -1,0 +1,8 @@
+<!--TPP partial for search -->
+<%= form_tag search_deals_path, :method => :get do %>
+	Search <u><i>Proposition</i></u> and <u><i>Description</i></u> Columns
+	<p>
+		<%= text_field_tag :keyword, params[:keyword] %>
+	</p>
+	
+<% end %>	

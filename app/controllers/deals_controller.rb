@@ -2,10 +2,21 @@ class DealsController < ApplicationController
   before_filter :assign_deal, only: [ :show, :edit, :update, :destroy ]
   before_filter :set_view_paths, only: :show
 
+# TPP added search method with pagination here 
+  def search
+    if params[:keyword] != nil
+      search_condition = "%" + params[:keyword] + "%"
+      @deals = Deal.find(:all, conditions: ['proposition LIKE ? OR description LIKE ?', search_condition, search_condition])
+      @deals = Kaminari.paginate_array(@deals).page(params[:page]).per(5)
+    end
+    render :action => 'index'
+  end    
+   
+# TPP change index method to paginate
   def index
-    @deals = Deal.all
+    @deals = Deal.order('proposition ASC, description ASC').page(params[:page]).per(6)
   end
-
+  
   def show
     respond_to do |format|
       format.html { render layout: "deals/show" }

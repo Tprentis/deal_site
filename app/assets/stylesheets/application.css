@@ -21,3 +21,11 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
+
+/* TPP add search_div style */
+#search_div {
+	font-size: 75%;
+	color: DarkGray; 
+	float: right;
+}
+

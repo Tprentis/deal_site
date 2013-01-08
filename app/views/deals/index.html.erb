@@ -1,5 +1,12 @@
 <h1>Deals</h1>
 
+
+<div id="search_div">
+	<%= render 'deals/search' %> <!--TPP add search using partial -->
+</div>
+
+			
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -31,6 +38,10 @@
   <% end %>
   </tbody>
 </table>
+
+			
+  <%= paginate @deals %> <!--TPP add pagination at top of page -->
+				
 
 <br />
 

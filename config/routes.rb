@@ -5,6 +5,9 @@ DealSite::Application.routes.draw do
 
   resources :deals do
     resource :advertiser
+    collection do # TPP add search_deals_path
+      get :search
+    end
   end
 
   resources :publishers do
