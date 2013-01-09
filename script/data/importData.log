@@ -1,0 +1,26 @@
+# Logfile created on 2013-01-09 10:35:14 -0500 by logger.rb/31641
+Questionable Record: Merchant  Date  Ends  Deal  Price Value 
+
+adv name=Burger King
+start at=10/2/2011
+end_at=10/4/2011
+description=Your way
+price=25
+value=50
+--------------------------
+adv name=McDonalds
+start at=10/5/2011
+end_at=2013-01-10 15:35:16 UTC
+description=Not really food
+price=22
+value=44
+--------------------------
+adv name=Arbys
+start at=10/8/2011
+end_at=10/10/2011
+description=More burgers
+price=7
+value=14
+--------------------------
+Questionable Record: Wendy's crap food 8 25
+
