@@ -6,7 +6,7 @@ class DealTest < ActiveSupport::TestCase
   end
 
 # TPP - changed 0.01 to 1.second
-  test "1 over should be less than current time" do
+  test "over should be less than Time Zone current time" do
     deal = FactoryGirl.create(:deal, :end_at => Time.zone.now + 1.second)
     assert !deal.over?, "Deal should not be over"
     sleep 1

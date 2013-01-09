@@ -1,3 +1,10 @@
+# TPP - This rake task is executed by issuing:  
+#       rake publisher:new_publisher PUBLISHER="Publisher Name" FILENAME="import file name"
+#       we expect the import file to be located in  folder #{Rails.root}/script/data
+#       Validations: Must have PUBLISHER= and FILENAME=  (import aborted if either is missing).
+#       Each import record must have at least one date field - in the format (m)m/(d)d/(yy)yy
+#
+
 namespace :publisher do 
 
   task :new_publisher => :environment do
@@ -38,7 +45,9 @@ namespace :publisher do
         # TPP init work variables
         @adv_name = ""
         @start_at = ""
+        @start_at_date = ""
         @end_at = ""
+        @end_at_date = ""
         @proposition = ""
         @price = 0
         @value = 0  
@@ -57,18 +66,21 @@ namespace :publisher do
             if result 
               @start_at = result.to_s
               @start_at = @start_at.strip
+              @start_at_date = format_date(@start_at)
+              puts "start_at_date = " + @start_at_date
               @ptr1 = i
               attr[i] = ""
               if i < max_attr 
                 result = DATE_REGEX.match attr[i + 1]
                 if result 
                   @ptr2 = i + 1
-                  @end_at = result.to_s 
-                  @end_at = @end_at.strip 
+                  @end_at = result.to_s.strip
+                  @end_at_date = format_date(@end_at)
                   attr[i + 1] = ""
                 else
-                  @end_at = Time.zone.now + 24.hours  # TPP no end date provided so substitute                  
-                end   
+                  @end_at_date = Time.zone.now + 24.hours  # TPP no end date provided so substitute                  
+                end 
+            
               end
             end
           end 
@@ -108,16 +120,16 @@ namespace :publisher do
           @description = result.strip         
                
           puts "adv name=#{@adv_name}"
-          puts "start at=#{@start_at}"
-          puts "end_at=#{@end_at}"
+          puts "start at=#{@start_at_date}"
+          puts "end_at=#{@end_at_date}"
           puts "description=#{@description}"
           puts "price=#{@price}"
           puts "value=#{@value}"
           puts "--------------------------"
           
           logger.info "adv name=#{@adv_name}"
-          logger.info "start at=#{@start_at}"
-          logger.info "end_at=#{@end_at}"
+          logger.info "start at=#{@start_at_date}"
+          logger.info "end_at=#{@end_at_date}"
           logger.info "description=#{@description}"
           logger.info "price=#{@price}"
           logger.info "value=#{@value}"
@@ -132,28 +144,35 @@ namespace :publisher do
           pub.name = publisher_name
           pub.theme = "entertainment-generic"
      
-          pub.save
+          pub.save!
      
           adv.publisher_id = pub.id
           adv.name = @adv_name
 
-          adv.save
+          adv.save!
  
           deal.proposition = "Big Deal!"
           deal.value = @value
           deal.price = @price
           deal.advertiser_id = adv.id
           deal.description = @description
-          deal.start_at = @start_at
-          deal.end_at = @end_at
-     
-          deal.save
+          deal.start_at = @start_at_date
+          deal.end_at = @end_at_date
+          deal.save!
+          
         else
           
-            puts "Questionable Record: " + line  
-            logger.info "Questionable Record: " + line      
+            puts "Questionable Record, Not Saved: " + line  
+            logger.info "Questionable Record, Not Saved: " + line      
             
         end  # TPP - if !@header    
       end  # TPP - end file read each_line loop   
   end # TPP - task do 
 end # TPP - namespace do
+
+def format_date(indate)
+  d = indate.split("/")
+  indate = d[2]+ "-" + d[0] + "-" + d[1]
+  outdate = indate.to_date.to_s 
+  outdate 
+end
